@@ -1,0 +1,1 @@
+This version has been updated to use classes to better organize my sloppy code.  Currently it is very poorly commented and still sloppy. In order to run the program, simply call the 'runme.py' file, there are only really 4 tuneable parameters for the simulation, they are all able to be tweaked in there.  
