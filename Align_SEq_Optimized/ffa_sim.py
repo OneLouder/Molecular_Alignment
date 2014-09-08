@@ -65,11 +65,22 @@ class ffa_sim:
         # End program
         return tt, cos2
 
-    def save_sim(self, filename = 'dummy.txt', tt=0, cos2=0):
+    def save_sim(self, tt=0, cos2=0):
         '''
-        Save Data 
+        Save Data
+        
+        filename string format:
+            molecule_temperature_pulseDuration_intensity.txt
+
+            temperature [K]
+            pulseDuration [s]
+            intensity [10**14 W cm**-2]
+
         '''
+        filename = self.molecule+'_'+str(self.temperature)+'_'+str(self.pulse)+'_'+\
+            str(self.intensity).replace('.','p')+'.txt'
         np.savetxt(filename, np.column_stack((tt,cos2)), delimiter = ',')
+        return filename
         print('Saved File: ' + filename)
     
     def load_sim(self, filename = 'dummy.txt'):
