@@ -1,5 +1,6 @@
 Molecular_Alignment
 ===================
+A poorly organized overview of various implementations of a simulation to study field free molecular alignment in simple molecuels. I kept all the different version organized this way to show my logical progression from a pure python implementation to one implementing dramatic speed ups using Cython. This is more so I don't forget what I did so I can re-learn from it in the future. This "project" was more of a training excercise that ultimately lead to simulations I needed in my research. Use and learn from at your own risk. 
 
 ## Align_SEq_Optimized
 The optimized version is the most complete.  It includes a Cython version of the molecular alignment code with the C files already constructed.  It doesn't require pyximport.
