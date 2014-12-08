@@ -63,7 +63,7 @@ class ffa_sim:
         exp_val.cos2plot(tt, cos2, mol.mol_str)
 
         # End program
-        return tt, cos2
+        return tt*hbar/B*10**12, cos2
 
     def save_sim(self, tt=0, cos2=0):
         '''
