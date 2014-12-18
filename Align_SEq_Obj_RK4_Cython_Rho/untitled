@@ -1,0 +1,44 @@
+def rho_unedit(self, np.ndarray[np.complex64_t, ndim = 3] Cstor, 
+        np.ndarray[np.float_t, ndim = 1, negative_indices = False] Jweight):
+        
+        # Type defs
+        cdef np.ndarray[np.complex64_t, ndim = 2, negative_indices = False] rh
+        cdef np.ndarray[np.complex64_t, ndim = 5, negative_indices = False] temp
+        cdef np.ndarray[np.complex64_t, ndim = 4, negative_indices = False] temp2, temp3
+        cdef np.ndarray[np.complex64_t, ndim = 3, negative_indices = False] temp4
+        cdef np.ndarray[np.float_t, ndim = 1, negative_indices = False] tt, theta, phi, js, jj1
+        cdef float w, dtheta, dphi
+        cdef int J, M, jj, th
+        
+        # Init
+        tt = np.linspace(0,5,100)
+        theta = np.linspace(0, np.pi / 2 , 10)
+        dtheta = theta[1]-theta[0]
+        phi = np.linspace(0, np.pi * 2, 9)
+        dphi = phi[1] - phi[0]
+
+        temp = np.zeros((len(theta), self.Jmax, self.Jmax * 2 +1, len(phi), len(tt) ),dtype = 'complex64')
+        temp2 = np.zeros((len(theta), self.Jmax, self.Jmax * 2 +1,len(tt) ),dtype = 'complex64')
+        temp3 = np.zeros((len(theta), self.Jmax, self.Jmax * 2 +1, len(tt) ),dtype = 'complex64')
+        temp4 = np.zeros((len(theta), self.Jmax, len(tt) ),dtype = 'complex64')
+        rh = np.zeros((len(theta), len(tt) ),dtype = 'complex64')
+        
+        # Ugliest loop ever.
+        for J in range(self.Jmax):
+            for M in range(-J,J+1):  
+                js = np.arange(float(abs(M)), float(self.Jmax+1))
+                jj1 = js * (js + 1)
+                for th in range(len(theta)):
+                    for ph in range(len(phi)):
+                        for jj in range(abs(M),self.Jmax):
+                            #add up jjs and phis
+                            temp[th,J,M,ph,:] += Cstor[J,M,jj] * np.exp( -1j * jj * (jj + 1) * tt ) * (-1j) ** M * sph_harm(M, jj, phi[ph], theta[th])
+                #integrate phis
+                    temp2[th,J,M,:] = np.sum(np.multiply(temp[th,J,M,:,:],np.conjugate(temp[th,J,M,:,:])), axis = 0) * dphi
+                #mag square of all jjs, M's, and weight
+                    temp3[th, J, M, :] = (temp2[th, J, M, :]  * Jweight[J] / ( 2 * J + 1) )*1#   np.sin(theta[th])
+        #sum them up.
+        temp4[:,:,:] = np.sum(temp3[:, :,:, :], axis = 2) 
+        rh[:,:]  = np.sum(temp4[:, :, :], axis = 1) 
+
+        return tt, theta, rh
