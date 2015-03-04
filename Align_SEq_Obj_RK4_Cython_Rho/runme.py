@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from pylab import *
 # import pyximport; pyximport.install()
 plt.close('all')
-rh = 'on'
-simulation = ffa_sim('CO2', 70, 100e-15, .1, rh)
+rh = 'off'
+simulation = ffa_sim('N2O', 70, 120e-15, .1, rh)
 t, cos2, theta,tt, rho = simulation.run_sim()
 
 if rh == 'off':
